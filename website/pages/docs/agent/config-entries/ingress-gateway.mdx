@@ -35,8 +35,9 @@ description: >-
     [protocol](/docs/agent/config-entries/ingress-gateway#protocol) as the
     listener will be routable.
   - The ingress gateway will route traffic based on the host/authority header,
-    expecting a value matching `<service-name>.*`, or if using namespaces,
-    `<service-name>.ingress.<namespace>.*`.
+    expecting a value matching `<service-name>.ingress.*`, or if using namespaces,
+    `<service-name>.ingress.<namespace>.*`. This matches the [Consul DNS
+    ingress subdomain](/docs/agent/dns#ingress-service-lookups).
 
   A wildcard specifier cannot be set on a listener of protocol `tcp`.
 
@@ -141,8 +142,10 @@ Listeners = [
       assumed.
 
     - `Hosts` `(array<string>: <optional>)` - A list of hosts that specify what
-      requests will match to this service. This cannot be used with a `tcp`
-      listener, and cannot be specified alongside a `*` service name.
+      requests will match this service. This cannot be used with a `tcp`
+      listener, and cannot be specified alongside a `*` service name. If not
+      specified, the default domain `<service-name>.ingress.*` will be used to
+      match services.
 
       If TLS is enabled, then each host will be added as a DNSSAN to the
       gateway's x509 certificate.
